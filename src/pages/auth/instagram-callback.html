@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Instagram Authentication</title>
+  <script>
+    window.onload = function() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      const state = params.get('state');
+      const error = params.get('error');
+      const error_description = params.get('error_description');
+
+      if (error) {
+        window.opener.postMessage(
+          { 
+            type: 'instagram-auth-error', 
+            error,
+            error_description 
+          },
+          window.location.origin
+        );
+      } else if (code) {
+        window.opener.postMessage(
+          { 
+            type: 'instagram-auth-success',
+            code,
+            state
+          },
+          window.location.origin
+        );
+      }
+
+      // Close the popup window
+      window.close();
+    };
+  </script>
+</head>
+<body>
+  <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: system-ui, -apple-system, sans-serif;">
+    <p>Processing Instagram authentication...</p>
+  </div>
+</body>
+</html>
